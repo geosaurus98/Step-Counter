@@ -1,0 +1,43 @@
+/*
+ * app.h
+ *
+ * Scheduler configuration for ENCE361 step counter project.
+ *
+ * Created on: Mar 13, 2025
+ * Author: eaz11 & gjo77
+ */
+
+#ifndef APP_H
+#define APP_H
+
+#include <stdint.h>
+
+#define TICK_FREQUENCY_HZ 1000
+#define HZ_TO_TICKS(FREQ_HZ) (TICK_FREQUENCY_HZ / (FREQ_HZ))
+
+// Task frequencies (Hz)
+#define TASK_BUTTON_FREQUENCY_HZ       50
+#define TASK_DISPLAY_FREQUENCY_HZ       4
+#define TASK_JOYSTICK_FREQUENCY_HZ      4
+#define TASK_SERIAL_FREQUENCY_HZ        4
+#define TASK_STEP_FREQUENCY_HZ          6
+#define TASK_TEST_FREQUENCY_HZ          4
+#define TASK_BUZZER_FREQUENCY_HZ       50
+#define TASK_ACCELEROMETER_FREQUENCY_HZ 60  // Should equal STEP_FREQUENCY * BUFFER_SIZE
+#define TASK_LED_FREQUENCY_HZ           4
+
+// Task periods (ticks)
+#define TASK_BUTTON_PERIOD_TICKS        HZ_TO_TICKS(TASK_BUTTON_FREQUENCY_HZ)
+#define TASK_DISPLAY_PERIOD_TICKS       HZ_TO_TICKS(TASK_DISPLAY_FREQUENCY_HZ)
+#define TASK_JOYSTICK_PERIOD_TICKS      HZ_TO_TICKS(TASK_JOYSTICK_FREQUENCY_HZ)
+#define TASK_SERIAL_PERIOD_TICKS        HZ_TO_TICKS(TASK_SERIAL_FREQUENCY_HZ)
+#define TASK_STEP_PERIOD_TICKS          HZ_TO_TICKS(TASK_STEP_FREQUENCY_HZ)
+#define TASK_TEST_PERIOD_TICKS          HZ_TO_TICKS(TASK_TEST_FREQUENCY_HZ)
+#define TASK_BUZZER_PERIOD_TICKS        HZ_TO_TICKS(TASK_BUZZER_FREQUENCY_HZ)
+#define TASK_ACCELEROMETER_PERIOD_TICKS HZ_TO_TICKS(TASK_ACCELEROMETER_FREQUENCY_HZ)
+#define TASK_LED_PERIOD_TICKS           HZ_TO_TICKS(TASK_LED_FREQUENCY_HZ)
+
+// Entry point for app
+void app_main(void);
+
+#endif // APP_H
