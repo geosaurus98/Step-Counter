@@ -22,9 +22,6 @@
 // Configuration
 // -----------------------------------------------------------------------------
 
-#define MAX_STEP_CHANGE_PER_TICK 15  // Maximum step change as % of goal
-#define HOLD_TIME_MS             1000
-
 static bool test_mode = false;
 
 // -----------------------------------------------------------------------------
@@ -39,10 +36,10 @@ void test_mode_update_stepcount(uint16_t adc_y) {
     uint16_t goal = get_goal();
     uint16_t current = get_steps();
 
-    if (percent >= 30 && direction) {
+    if (percent >= 30) {
         // Scale step change to joystick force and goal size
         uint16_t max_step_change = (goal * MAX_STEP_CHANGE_PER_TICK) / 1000;
-        uint8_t step_delta = (percent * max_step_change) / 100;
+        uint16_t step_delta = (percent * max_step_change) / 100;
 
         if (strcmp(direction, "Up") == 0) {
             uint16_t new_count = (current + step_delta > goal) ? goal : current + step_delta;
@@ -58,7 +55,7 @@ void test_mode_update_stepcount(uint16_t adc_y) {
 void test_mode_execute(void) {
     if (test_mode && !check_set_goal_state()) {
         uint16_t* adc_values = joystick_get_values();
-        uint16_t adc_y = adc_values[1];
+        uint16_t adc_y = adc_values[ADC_IDX_Y];
         test_mode_update_stepcount(adc_y);
     }
 }

@@ -19,12 +19,11 @@
 
 #include <string.h>
 
-#define HOLD_TIME_MS              1000  // Time required for a long press
 #define DISPLAY_TOGGLE_THRESHOLD    90  // Minimum upward joystick % to allow toggle
 
-static uint16_t raw_adc[3];  // Format: [Y, X, Potentiometer]
+static uint16_t raw_adc[3];  // Format: [Potentiometer, Y, X]
 
-// Returns the current raw ADC values (from DMA): [Y, X, Pot]
+// Returns the current raw ADC values (from DMA): [Pot, Y, X]
 uint16_t* joystick_get_values(void) {
     return raw_adc;
 }
@@ -68,7 +67,7 @@ void check_for_display_toggle(void) {
     static bool toggle_locked = false;
 
     uint16_t* adc_values = joystick_get_values();
-    uint16_t adc_y = adc_values[1];  // Y is at index 1
+    uint16_t adc_y = adc_values[ADC_IDX_Y];
 
     uint8_t y_percent = calculate_y_percentage(adc_y);
     const char* direction = get_y_direction(adc_y);

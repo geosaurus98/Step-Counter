@@ -11,7 +11,8 @@
 #include "accelerometer.h"
 #include "imu_lsm6ds.h"
 
-#define ORIENTATION_THRESHOLD 16000
+#define ORIENTATION_THRESHOLD  16000  // Raw axis value above which a dominant orientation is detected
+#define ACCEL_GRAVITY_BASELINE  9310  // Expected gravity magnitude in sensor raw units (used to pre-fill filter)
 
 // Module-scoped filters and latest result
 static AveragingFilter x_filter, y_filter, z_filter;
@@ -20,7 +21,7 @@ static FilteredAcceleration latest_filtered_data;
 // Initializes an averaging filter with zeros
 void filter_init(AveragingFilter *filter) {
     for (int i = 0; i < BUFFER_SIZE; i++) {
-        filter->buffer[i] = 9310;  // Pre-fill buffer for consistent initial output
+        filter->buffer[i] = ACCEL_GRAVITY_BASELINE;
     }
     filter->index = 0;
 }
@@ -65,18 +66,18 @@ FilteredAcceleration accelerometer_execute(void) {
 
     int16_t x_offset = 0, y_offset = 0, z_offset = 0;
 
-    if (ax > ORIENTATION_THRESHOLD) {
+    if (ax > ORIENTATION_THRESHOLD) {          // Portrait right
         x_offset = 100; y_offset = -70; z_offset = -500;
-    } else if (ax < -ORIENTATION_THRESHOLD) {
+    } else if (ax < -ORIENTATION_THRESHOLD) {  // Portrait left
         x_offset = 100; z_offset = 300;
-    } else if (ay > ORIENTATION_THRESHOLD) {
+    } else if (ay > ORIENTATION_THRESHOLD) {   // Landscape top-up
         x_offset = 500; y_offset = -200; z_offset = 600;
-    } else if (ay < -ORIENTATION_THRESHOLD) {
+    } else if (ay < -ORIENTATION_THRESHOLD) {  // Landscape top-down
         x_offset = -65; z_offset = -225;
-    } else if (az > ORIENTATION_THRESHOLD) {
+    } else if (az > ORIENTATION_THRESHOLD) {   // Face-up (flat)
         x_offset = 150; y_offset = -110;
-    } else {
-    	x_offset = 0; y_offset = 0; z_offset = 0;
+    } else {                                   // Face-down (flat)
+        x_offset = 0; y_offset = 0; z_offset = 0;
     }
 
     ax += x_offset;

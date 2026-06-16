@@ -49,5 +49,4 @@ void LED_execute(void)
     }
 
     pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, duty_cycle_level); // DS3
-    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
 }

@@ -7,8 +7,8 @@
  * Author: eaz11 & gjo77
  */
 
-#ifndef APP_H
-#define APP_H
+#ifndef APP_H_
+#define APP_H_
 
 #include <stdint.h>
 
@@ -40,4 +40,4 @@
 // Entry point for app
 void app_main(void);
 
-#endif // APP_H
+#endif /* APP_H_ */

@@ -13,8 +13,6 @@
 #include "goal_tracker.h"
 #include "test_mode.h"
 #include "step_detection.h"
-#include "ssd1306.h"
-
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -55,7 +53,7 @@ static uint32_t next_note_time = 0;
 static uint8_t current_note_index = 0;
 
 // Sets buzzer frequency using TIM16 PWM
-void set_buzzer_freq(uint16_t freq) {
+static void set_buzzer_freq(uint16_t freq) {
     uint32_t timer_clk = HAL_RCC_GetPCLK1Freq();
     uint32_t period = (timer_clk / freq) - 1;
 

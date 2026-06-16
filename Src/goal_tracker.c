@@ -22,9 +22,6 @@
 // Configuration
 // -----------------------------------------------------------------------------
 
-#define MAX_GOAL_VALUE        15000
-#define MIN_GOAL_VALUE         500
-
 // -----------------------------------------------------------------------------
 // State Variables
 // -----------------------------------------------------------------------------
@@ -71,14 +68,14 @@ void goal_set_mode(void)
 }
 
 // Called when entering goal setting mode; saves current goal
-void steps_enter_goal_setting(void)
+static void steps_enter_goal_setting(void)
 {
     prev_goal = goal;
     set_goal_mode_toggle();
 }
 
 // Called when exiting goal setting mode; enforces that step count ≤ goal
-void steps_exit_goal_setting(void)
+static void steps_exit_goal_setting(void)
 {
     set_goal_mode_toggle();
     if (get_steps() > goal) {
@@ -99,7 +96,7 @@ uint8_t get_goal_progress_percentage(void) {
 }
 
 // Toggles goal setting mode flag
-void set_goal_mode_toggle(void) {
+static void set_goal_mode_toggle(void) {
     set_goal_state = !set_goal_state;
 }
 

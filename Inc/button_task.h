@@ -8,8 +8,8 @@
  * Author: eaz11 & gjo77
  */
 
-#ifndef INC_BUTTON_TASK_H_
-#define INC_BUTTON_TASK_H_
+#ifndef BUTTON_TASK_H_
+#define BUTTON_TASK_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -24,4 +24,4 @@ typedef struct {
 // Executes button logic for all directions
 void button_task_execute(void);
 
-#endif /* INC_BUTTON_TASK_H_ */
+#endif /* BUTTON_TASK_H_ */

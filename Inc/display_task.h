@@ -8,11 +8,8 @@
  * Author: eaz11 & gjo77
  */
 
-#ifndef INC_DISPLAY_TASK_H_
-#define INC_DISPLAY_TASK_H_
-
-#include <stdint.h>
-#include <stdio.h>
+#ifndef DISPLAY_TASK_H_
+#define DISPLAY_TASK_H_
 
 // Initializes the OLED display (called once at startup)
 void display_task_init(void);
@@ -20,7 +17,7 @@ void display_task_init(void);
 // Updates the display with appropriate screen content
 void display_task_execute(void);
 
-// Toggles between unit display modes (km/yd, %, raw)
+// Toggles between display unit modes (counts/km/steps-per-goal vs. %/yards/%)
 void display_toggle(void);
 
-#endif /* INC_DISPLAY_TASK_H_ */
+#endif /* DISPLAY_TASK_H_ */

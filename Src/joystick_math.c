@@ -55,6 +55,7 @@ uint8_t calculate_potentiometer_percentage(uint16_t adc_value)
 }
 
 // Returns X-axis movement direction
+// Note: low ADC = Right, high ADC = Left (potentiometer reads inverse of physical direction)
 const char* get_x_direction(uint16_t adc_x)
 {
     if (adc_x < X_CENTRE - CENTRE_THRESHOLD) {

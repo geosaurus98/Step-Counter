@@ -1,7 +1,7 @@
 # Introduction
 This project implements an embedded step counter using an STM32C071 Nucleo board and a custom expansion module. Developed for ENCE361, it features modular, interrupt-driven firmware that captures accelerometer data to estimate steps and distance.  
 Users interact with the system via a joystick, rotary potentiometer, and OLED screen to view progress, set goals, and toggle units. LEDs and a buzzer provide feedback, and a test mode enables validation without walking.  
-The firmware is organised into periodic tasks, each handling a distinct function—such as filtering, UI navigation, or goal tracking—following clean code principles. This report details the system’s modular structure, firmware behaviour, profiling results, and key design insights.
+The firmware is organised into periodic tasks, each handling a distinct function—such as filtering, UI navigation, or goal tracking—following clean code principles. This README details the system’s modular structure, firmware behaviour, profiling results, and key design insights.
 
 # Description of overall project
 The goal for this project is to design a step counter on the STM32C071 Nucleo board that tracks a user’s steps by physical movement and displays the count on an OLED display. This product can be applicable to users as a health device or a fitness device. To use the step counter, the user must turn on the device by pressing the on button on the board. When the device is turned on, users have to place the device on their hips and start walking. The device increments the step count by 1 for each detected step. The user can set goals from 500 steps all the way to 15,000 using the potentiometer on the side of the device. The user can also see their progress and the distance travelled. Once the user has reached their goal, the board will award the user with a celebratory tone for completion. The user can now set a new goal and repeat the process.
@@ -30,7 +30,7 @@ The table below categorises all source modules in the project into three groups:
 | led.c/h              |                        | usart.h                    |
 | serial.c/h           |                        |                            |
 | step_detection.c/h   |                        |                            |
-| test_mode.c          |                        |                            |
+| test_mode.c/h        |                        |                            |
 
 # Modularisation - Dependency Diagram
 
@@ -48,10 +48,10 @@ The serial module functions as a debugger of real time raw data of acceleration 
 The accelerometer.c module functions as a handler for raw accelerometer readings of X, Y and Z axes, and filters the raw data for noise. By filtering out the noise it is then able to calculate the magnitude of X, Y and Z using Pythagoras theorem. 
 
 **buzzer.c/h**  
-The buzzer module plays a reward tone/sound when the user has reached their step goal using a PWM buzzer. The `buzzer_execute` function checks if the user has reached the step goal by comparing the number of steps the users have taken vs the number of steps the user set as the goal, if true the `buzzer_start` function starts the PWM signals and `buzzer_end` stops the PWM signal. 
+The buzzer module plays a reward tone/sound when the user has reached their step goal using a PWM buzzer. The `buzzer_execute` function checks if the user has reached the step goal by comparing the number of steps the users have taken vs the number of steps the user set as the goal, if true the `buzzer_start` function starts the PWM signals and `buzzer_stop` stops the PWM signal. 
 
 **led.c/h**  
-The led module functions as visualization for goal progress using three RGB LEDs and one PWM-controlled LED, in increments of 25%, this module is dependent on the current goal percentage. If the progress is under 25% then the duty cycle for DS3 is calculated. When the user is at 50, 75 and 100% on their goal progress, the RGB LEDs switch on. The DS3 brightness updates and PWM restarts every time the function is called.
+The led module functions as visualization for goal progress using three RGB LEDs and one PWM-controlled LED, in increments of 25%, this module is dependent on the current goal percentage. If the progress is under 25% then the duty cycle for DS3 is calculated. When the user is at 50, 75 and 100% on their goal progress, the RGB LEDs switch on. DS3 brightness is updated every time the function is called.
 
 ## Core Logic Modules
 
@@ -70,7 +70,7 @@ The test module functions as a debugger for step counts using the joystick's Y d
 ## Input Modules
 
 **button_task.c/h**  
-The button task module functions as the hardware handler for physical buttons on the board. It manual increments the steps and only work when it’s not set to ‘set goal’ mode. Up buttons increment steps; down button toggles the serial output if pressed once and toggles test mode when pressed twice. Left and right buttons perform no actions.
+The button task module functions as the hardware handler for physical buttons on the board. It manually increments the steps and only work when it’s not set to ‘set goal’ mode. Up buttons increment steps; down button toggles the serial output if pressed once and toggles test mode when pressed twice. Left and right buttons perform no actions.
 
 **joystick_task.c/h**  
 The joystick task module functions as a handler for joystick ADC readings and button press detection. This module detects click durations for entering and exiting goal-setting mode. It detects upward motion in the Y direction to toggle between units. Examples of joystick task toggles include different states with two different UIs. Goal progress has one view showing steps/goal and another showing the percentage of completion. Distance can be viewed in either kilometres or yards.
@@ -100,9 +100,8 @@ The firmware operates under a cooperative task scheduler, using `HAL_GetTick()` 
 
 Filtered accelerometer magnitude (squared) is compared against two thresholds:
 
-- Upper threshold (305M): counts a step if not currently in `step_detected` state.
-- Between threshold (225–305M): Resets the `step_detection` flag.
-- Lower threshold (225M): counts a step if not currently in `step_detected` state.
+- Above upper threshold (305M) or below lower threshold (225M): counts a step if not currently in `step_detected` state.
+- Between thresholds (225–305M): resets the `step_detected` flag, ready for the next step.
 
 This hysteresis-based approach ensures reliable detection while filtering out jitter and noise. All step increments—whether from physical motion, button press, or test mode—are routed through `increment_stepcount_common()` for consistency and clamping.
 

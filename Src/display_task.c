@@ -29,7 +29,7 @@ static void format_distance(char *buf, size_t size);
 static void format_progress(char *buf, size_t size);
 
 // Display mode toggle flag (true = percentage/km, false = raw/yd)
-bool display_mode;
+static bool display_mode;
 
 // --- Public Functions ---
 
@@ -109,10 +109,8 @@ static void display_draw_main_screen(void) {
             format_progress(buf, sizeof(buf));
 
             if (!display_mode) {
-                char steps_buf[20];
-                snprintf(steps_buf, sizeof(steps_buf), "Steps");
                 ssd1306_SetCursor(0, 36);
-                ssd1306_WriteString(steps_buf, Font_11x18, White);
+                ssd1306_WriteString("Steps", Font_11x18, White);
             }
             break;
 

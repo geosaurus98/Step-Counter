@@ -8,8 +8,8 @@
  * Author: eaz11 & gjo77
  */
 
-#ifndef GOAL_TRACKER_H
-#define GOAL_TRACKER_H
+#ifndef GOAL_TRACKER_H_
+#define GOAL_TRACKER_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -19,11 +19,6 @@ void potentiometer_update_stepcount(uint16_t potent);
 
 // Manages entry/exit of goal-setting state based on long/short presses
 void goal_set_mode(void);
-
-// Enters and exits goal-setting mode (internal logic)
-void steps_enter_goal_setting(void);
-void steps_exit_goal_setting(void);
-void set_goal_mode_toggle(void);
 
 // Goal state toggles (driven by user input)
 void longpress_toggle(void);
@@ -38,4 +33,4 @@ uint8_t get_goal_progress_percentage(void);
 // Returns true if currently in goal-setting state
 bool check_set_goal_state(void);
 
-#endif // GOAL_TRACKER_H
+#endif /* GOAL_TRACKER_H_ */

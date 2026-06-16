@@ -27,12 +27,6 @@ void serial_task_execute(void) {
 
     char uart_buffer[128];
 
-    // Retrieve raw joystick/potentiometer ADC readings
-    //uint16_t* adc_values = joystick_get_values();
-    //uint16_t adc_x = adc_values[2];
-    //uint16_t adc_y = adc_values[1];
-    //uint16_t potent = adc_values[0]; // Not printed here but could be included
-
     // Retrieve filtered accelerometer data
     FilteredAcceleration data = accelerometer_get_latest();
 

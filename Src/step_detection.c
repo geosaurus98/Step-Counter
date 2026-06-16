@@ -17,7 +17,6 @@
 #include "fsm.h"
 
 #include <stdint.h>
-#include <stdlib.h>
 #include <stdbool.h>
 
 // -----------------------------------------------------------------------------
@@ -25,8 +24,8 @@
 // -----------------------------------------------------------------------------
 
 #define STEP_LENGTH_CM          90  // Distance per step in cm
-#define LOWER_THRESHOLD        225000000
-#define UPPER_THRESHOLD        305000000
+#define LOWER_THRESHOLD        225000000  // Squared magnitude (raw sensor units): lower hysteresis bound
+#define UPPER_THRESHOLD        305000000  // Squared magnitude (raw sensor units): upper hysteresis bound
 
 // -----------------------------------------------------------------------------
 // State
@@ -40,7 +39,7 @@ static uint16_t step_count = 0;
 // -----------------------------------------------------------------------------
 
 // Common increment logic used for both test mode and normal steps
-void increment_stepcount_common(uint16_t increment_value) {
+static void increment_stepcount_common(uint16_t increment_value) {
     if (check_test_mode()) {
         uint16_t goal = get_goal();
         if (step_count < goal) {
@@ -84,18 +83,18 @@ uint16_t get_steps(void) {
 
 // Main step processing loop, runs periodically
 void steps_task_execute(void) {
-	static bool initialized = false;
-	static uint32_t skip_start = 0;
-	if (!initialized) {
-	    if (skip_start == 0) skip_start = HAL_GetTick();
-	    if (HAL_GetTick() - skip_start < 500) return; // skip first 500ms
-	    initialized = true;
-	}
+    static bool initialized = false;
+    static uint32_t skip_start = 0;
+    if (!initialized) {
+        if (skip_start == 0) skip_start = HAL_GetTick();
+        if (HAL_GetTick() - skip_start < 500) return; // skip first 500ms
+        initialized = true;
+    }
 
 
     uint16_t* adc_values = joystick_get_values();
-    uint16_t adc_x = adc_values[2];
-    uint16_t potent = adc_values[0];
+    uint16_t adc_x = adc_values[ADC_IDX_X];
+    uint16_t potent = adc_values[ADC_IDX_POT];
     bool test_mode = check_test_mode();
 
     if (!test_mode && !check_set_goal_state()) {
@@ -106,7 +105,7 @@ void steps_task_execute(void) {
 
         // Get filtered magnitude from accelerometer
         FilteredAcceleration data = accelerometer_get_latest();
-        uint32_t magnitude_square = data.magnitude_square;
+        uint64_t magnitude_square = data.magnitude_square;
 
         // Step detection logic using hysteresis-style thresholds
         if ((magnitude_square > UPPER_THRESHOLD && !step_detected) ||

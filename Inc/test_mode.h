@@ -8,8 +8,8 @@
  * Author: eaz11 & gjo77
  */
 
-#ifndef TEST_MODE_H
-#define TEST_MODE_H
+#ifndef TEST_MODE_H_
+#define TEST_MODE_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -26,4 +26,4 @@ void test_mode_update_stepcount(uint16_t adc_y);
 // Returns whether test mode is currently active
 bool check_test_mode(void);
 
-#endif // TEST_MODE_H
+#endif /* TEST_MODE_H_ */

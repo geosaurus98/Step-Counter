@@ -9,8 +9,8 @@
  * Author: eaz11 & gjo77
  */
 
-#ifndef INC_LED_H_
-#define INC_LED_H_
+#ifndef LED_H_
+#define LED_H_
 
 // Initializes LED PWM and state
 void LED_init(void);
@@ -18,4 +18,4 @@ void LED_init(void);
 // Updates LED state based on current goal progress
 void LED_execute(void);
 
-#endif /* INC_LED_H_ */
+#endif /* LED_H_ */

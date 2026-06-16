@@ -8,8 +8,8 @@
  * Author: eaz11 & gjo77
  */
 
-#ifndef FSM_H
-#define FSM_H
+#ifndef FSM_H_
+#define FSM_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -33,4 +33,4 @@ void fsm_update(uint16_t adc_x, bool test_mode);
 // Returns the current screen state
 display_state_t fsm_get_current_state(void);
 
-#endif // FSM_H
+#endif /* FSM_H_ */

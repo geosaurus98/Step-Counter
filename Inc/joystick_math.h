@@ -8,8 +8,8 @@
  * Author: eaz11 & gjo77
  */
 
-#ifndef INC_JOYSTICK_MATH_H_
-#define INC_JOYSTICK_MATH_H_
+#ifndef JOYSTICK_MATH_H_
+#define JOYSTICK_MATH_H_
 
 #include <stdint.h>
 
@@ -39,4 +39,4 @@ const char* get_x_direction(uint16_t adc_x);
 // Returns direction based on Y-axis value ("Up", "Down", "Rest")
 const char* get_y_direction(uint16_t adc_y);
 
-#endif /* INC_JOYSTICK_MATH_H_ */
+#endif /* JOYSTICK_MATH_H_ */
